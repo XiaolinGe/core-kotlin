@@ -1,9 +1,10 @@
-package Koans
+package extensions
 
-fun toJSON(collection: Collection<Int>): String {
+
+fun List<Int>.toJson(): String {
     val sb = StringBuilder()
     sb.append("[")
-    val iterator = collection.iterator()
+    val iterator = this.iterator()
     while (iterator.hasNext()) {
         val element = iterator.next()
         sb.append(element)
@@ -15,6 +16,8 @@ fun toJSON(collection: Collection<Int>): String {
     return sb.toString()
 }
 
+
+
 fun main(args: Array<String>) {
-    toJSON(listOf(1,2,3,4))
+  print(listOf(1,2,3,5).toJson())
 }
