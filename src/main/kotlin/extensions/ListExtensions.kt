@@ -33,7 +33,6 @@ fun List<String>.joinToString(): String {
 
 
 fun main(args: Array<String>) {
-  println(listOf(1,2,3,5).toJson())
-
-  println(listOf("yes", "no", "may be").joinToString())
+    println(listOf(1, 2, 3, 5).toJson())
+    println(listOf("yes", "no", "may be").joinToString())
 }
