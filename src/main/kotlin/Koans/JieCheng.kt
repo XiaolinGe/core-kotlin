@@ -81,8 +81,49 @@ fun sum2(n: Int): Int {
 fun sum3(n: Int): Int {
     return (1..n).map { jiecheng3(it) }.sum()
 }
-fun main(args: Array<String>) {
-    println(sum1(3))
-    println(sum2(4))
-    println(sum3(5))
+
+
+fun getList(max: Int): List<Int> {
+    // 用 take while 和 generateSequence
+    return (1..max).takeWhile { jiecheng3(it) < max }
 }
+
+
+fun generate(): Sequence<Int> {
+    val squrence = generateSequence(1) { it.inc() }
+    return squrence
+}
+
+
+fun sum4(n: Int): Sequence<Int> {
+    val list = generate()
+    return list.takeWhile {
+        println("filter $it")
+        jiecheng3(it) < n
+    }
+
+}
+
+fun sum5(n: Int): Sequence<Int> {
+    val list = generate()
+    return list.filter {
+        println("filter $it")
+        jiecheng3(it) < n
+    }
+}
+
+fun main(args: Array<String>) {
+//    println(sum1(3))
+//    println(sum2(4))
+//    println(sum3(5))
+//
+//    println(getList(10))
+//    println(generate())
+    println("======== takewhile =========")
+    println(sum4(10).toList())
+
+    println("======== filter =========")
+     // println(sum5(10).toList())
+}
+
+
