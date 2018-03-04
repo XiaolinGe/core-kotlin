@@ -74,7 +74,7 @@ val sortedCustomers = listOf(cooper, nathan, bajram, asuka, lucas, riku, reka).m
 val groupedByCities = mapOf(
         Canberra to listOf(lucas, cooper),
         Vancouver to listOf(nathan),
-        Budapest to listOf( ),
+        Budapest to listOf(reka),
         Ankara to listOf(bajram),
         Tokyo to listOf(asuka, riku)
 ).mapValues { it.value.map { name -> customers[name] } }
