@@ -5,6 +5,9 @@ import org.junit.Test
 
 class TestGroupBy {
     @Test fun testGroupCustomersByCity() {
+        println(shop.groupCustomersByCity())
+
         Assert.assertEquals(groupedByCities, shop.groupCustomersByCity())
     }
 }
+
