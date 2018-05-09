@@ -29,14 +29,16 @@ object MySQLDatabaseExampleKotlin {
             val roleList = getRoles(getResultSet("role", stmt, resultset))
             val ruleList = getRules(getResultSet("rule", stmt, resultset))
             val permissionList = getPermissions("address")
-            val rolePermissions = getRolePermissions(roleList, permissionList)
-            val rolePermissionRules = getRolePermissionRule(rolePermissions, ruleList)
+            val rolePermissionList = getRolePermissions(roleList, permissionList)
+            val rolePermissionRuleList = getRolePermissionRule(rolePermissionList, ruleList)
+            val sqlList= getPermissionSql(permissionList)
 
             println(roleList)
             println(ruleList)
             println(permissionList)
-            println(rolePermissions)
-            println(rolePermissionRules)
+            println(rolePermissionList)
+            println(rolePermissionRuleList)
+            println(sqlList)
 
 
 
@@ -257,5 +259,17 @@ object MySQLDatabaseExampleKotlin {
         }
 
         return rolePermissionRuleList
+    }
+
+    fun getPermissionSql(permissionList: List<Permission>):List<String> {
+        val sqlList = mutableListOf<String>()
+        permissionList.map { permission ->
+            val sql = """
+                    INSERT INTO permission (id, version, auth_key, auth_uris, display, entity, http_method, creator_id, modifier_id) VALUES (${permission.id},${permission.version},'${permission.authKey}','${permission.authUris}','${permission.display}','${permission.entity}','${permission.httpMethod}',${permission.creatorId}, ${permission.modifierId});
+                """.trimIndent()
+
+            sqlList.add(sql)
+        }
+        return sqlList
     }
 }
