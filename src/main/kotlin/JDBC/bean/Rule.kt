@@ -2,15 +2,15 @@ package JDBC.bean
 
 data class Rule(
 
-        val id: Long? = null,
+        var id: Long? = null,
 
-        val version: Long? = null,
+        var version: Long? = null,
 
-        val name: String? = null,
+        var name: String? = null,
 
-        val params: String? = null,
+        var params: String? = null,
 
-        val type: String? = null,
+        var type: String? = null,
 
         var enable: String? = null
 )

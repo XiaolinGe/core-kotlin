@@ -1,9 +1,10 @@
 package JDBC
 
+import JDBC.bean.Role
+import JDBC.bean.Rule
 import java.sql.*
 import java.util.Properties
 import java.sql.ResultSet
-
 
 
 /**
@@ -26,16 +27,9 @@ object MySQLDatabaseExampleKotlin {
         var resultset: ResultSet? = null
 
         try {
-            stmt = conn!!.createStatement()
-            resultset = stmt!!.executeQuery("SELECT * FROM collinson.role WHERE id=1;")
+            val roleList = getRoles(getResultSet("role"))
+            val ruleList = getRules(getResultSet("rule"))
 
-            if (stmt.execute("SELECT * FROM collinson.role WHERE id=1;")) {
-                resultset = stmt.resultSet
-            }
-
-            while (resultset!!.next()) {
-                println(resultset.getString("name"))
-            }
         } catch (ex: SQLException) {
             // handle any errors
             ex.printStackTrace()
@@ -90,5 +84,48 @@ object MySQLDatabaseExampleKotlin {
             // handle any errors
             ex.printStackTrace()
         }
+    }
+
+    fun getResultSet(beanName: String): ResultSet{
+        var stmt: Statement? = null
+        var resultset: ResultSet? = null
+        stmt = conn!!.createStatement()
+        val sql = "SELECT * FROM collinson.$beanName;"
+        resultset = stmt!!.executeQuery(sql)
+
+        if (stmt.execute(sql)) {
+            resultset = stmt.resultSet
+
+        }
+        return resultset
+    }
+
+    fun getRoles(resultset: ResultSet): List<Role> {
+        val roleList = mutableListOf<Role>()
+        while (resultset.next()) {
+            val role = JDBC.bean.Role()
+            role.id = resultset.getLong("id")
+            role.version = resultset.getLong("version")
+            role.name = resultset.getString("name")
+            role.creatorId = resultset.getLong("creator_id")
+            role.modifierId = resultset.getLong("modifier_id")
+            roleList.add(role)
+        }
+        return roleList
+    }
+
+    fun getRules(resultset: ResultSet): List<Rule> {
+        val ruleList = mutableListOf<Rule>()
+        while (resultset.next()) {
+            val rule = JDBC.bean.Rule()
+            rule.id = resultset.getLong("id")
+            rule.version = resultset.getLong("version")
+            rule.name = resultset.getString("name")
+            rule.params = resultset.getString("params")
+            rule.type = resultset.getString("type")
+            rule.enable = resultset.getString("enable")
+            ruleList.add(rule)
+        }
+        return ruleList
     }
 }
