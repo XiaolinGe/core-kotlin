@@ -2,9 +2,9 @@ package JDBC.bean
 
 data class Permission(
 
-        val id: Long? = null,
+        var id: Long? = null,
 
-        val version: Long? = null,
+        var version: Long? = null,
 
         var authKey: String? = null,
 
@@ -12,7 +12,7 @@ data class Permission(
 
         var display: String? = null,
 
-        val entity: String? = null,
+        var entity: String? = null,
 
         var httpMethod: String? = null,
 
@@ -22,6 +22,6 @@ data class Permission(
 
         var creatorId: Long? = null,
 
-        val modifierId: Long? = null
+        var modifierId: Long? = null
 
 )

@@ -1,5 +1,6 @@
 package JDBC
 
+import JDBC.bean.Permission
 import JDBC.bean.Role
 import JDBC.bean.Rule
 import java.sql.*
@@ -27,8 +28,13 @@ object MySQLDatabaseExampleKotlin {
         var resultset: ResultSet? = null
 
         try {
-            val roleList = getRoles(getResultSet("role"))
-            val ruleList = getRules(getResultSet("rule"))
+            val roleList = getRoles(getResultSet("role", stmt, resultset))
+            val ruleList = getRules(getResultSet("rule", stmt, resultset))
+            val permissionList = getPermissions("address")
+
+            println(roleList)
+            println(ruleList)
+            println(permissionList)
 
         } catch (ex: SQLException) {
             // handle any errors
@@ -86,18 +92,18 @@ object MySQLDatabaseExampleKotlin {
         }
     }
 
-    fun getResultSet(beanName: String): ResultSet{
-        var stmt: Statement? = null
-        var resultset: ResultSet? = null
+    fun getResultSet(beanName: String, statement: Statement?, resultset: ResultSet?): ResultSet{
+        var stmt = statement
+        var res = resultset
         stmt = conn!!.createStatement()
         val sql = "SELECT * FROM collinson.$beanName;"
-        resultset = stmt!!.executeQuery(sql)
+        res = stmt!!.executeQuery(sql)
 
         if (stmt.execute(sql)) {
-            resultset = stmt.resultSet
+            res = stmt.resultSet
 
         }
-        return resultset
+        return res
     }
 
     fun getRoles(resultset: ResultSet): List<Role> {
@@ -127,5 +133,89 @@ object MySQLDatabaseExampleKotlin {
             ruleList.add(rule)
         }
         return ruleList
+    }
+
+    fun getPermissions(entityName: String):List<Permission> {
+
+        val permissionList = mutableListOf<Permission>()
+        val baseId = 1
+
+        permissionList.add(indexPermission(entityName))
+        permissionList.add(createPermission(entityName))
+        permissionList.add(readPermission(entityName))
+        permissionList.add(updatePermission(entityName))
+        permissionList.add(deletePermission(entityName))
+
+       permissionList.mapIndexed { index, permission ->
+           permission.id = (baseId*100 + index.inc()).toLong()
+       }
+
+        return permissionList
+
+    }
+
+    fun indexPermission(entityName: String): Permission {
+        val permission = Permission()
+        permission.version = 0
+        permission.authKey = "Index $entityName"
+        permission.authUris = "/v[\\d]+/$entityName"
+        permission.display = "Index $entityName"
+        permission.entity = entityName
+        permission.httpMethod = "GET"
+        permission.creatorId = 1
+        permission.modifierId = 1
+        return permission
+    }
+
+    fun createPermission(entityName: String): Permission {
+        val permission = Permission()
+        permission.version = 0
+        permission.authKey = "Create $entityName"
+        permission.authUris = "/v[\\d]+/$entityName"
+        permission.display = "Create $entityName"
+        permission.entity = entityName
+        permission.httpMethod = "POST"
+        permission.creatorId = 1
+        permission.modifierId = 1
+        return permission
+    }
+
+    fun readPermission(entityName: String): Permission {
+        val permission = Permission()
+        permission.version = 0
+        permission.authKey = "Read $entityName"
+        permission.authUris = "/v[\\d]+/$entityName/[\\d]+"
+        permission.display = "Read $entityName"
+        permission.entity = entityName
+        permission.httpMethod = "GET"
+        permission.creatorId = 1
+        permission.modifierId = 1
+        return permission
+    }
+
+    fun updatePermission(entityName: String): Permission {
+        val permission = Permission()
+        permission.version = 0
+        permission.authKey = "Update $entityName"
+        permission.authUris = "/v[\\d]+/$entityName/[\\d]+"
+        permission.display = "Update $entityName"
+        permission.entity = entityName
+        permission.httpMethod = "PUT"
+        permission.creatorId = 1
+        permission.modifierId = 1
+        return permission
+    }
+
+    fun deletePermission(entityName: String): Permission {
+        val permission = Permission()
+        permission.version = 0
+        permission.authKey = "Delete $entityName"
+        permission.authUris = "/v[\\d]+/$entityName/[\\d]+"
+        permission.display = "Delete $entityName"
+        permission.entity = entityName
+        permission.httpMethod = "DELETE"
+        permission.creatorId = 1
+        permission.modifierId = 1
+        return permission
     }
 }
