@@ -2,8 +2,8 @@ package JDBC.bean
 
 data class RolePermissionRule(
 
-        val rolePermissionId: Long? = null,
+        var rolePermissionId: Long? = null,
 
-        val roleId: Long? = null
+        var ruleId: Long? = null
 
 )

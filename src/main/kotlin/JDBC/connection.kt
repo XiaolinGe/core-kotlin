@@ -1,8 +1,6 @@
 package JDBC
 
-import JDBC.bean.Permission
-import JDBC.bean.Role
-import JDBC.bean.Rule
+import JDBC.bean.*
 import java.sql.*
 import java.util.Properties
 import java.sql.ResultSet
@@ -31,10 +29,16 @@ object MySQLDatabaseExampleKotlin {
             val roleList = getRoles(getResultSet("role", stmt, resultset))
             val ruleList = getRules(getResultSet("rule", stmt, resultset))
             val permissionList = getPermissions("address")
+            val rolePermissions = getRolePermissions(roleList, permissionList)
+            val rolePermissionRules = getRolePermissionRule(rolePermissions, ruleList)
 
             println(roleList)
             println(ruleList)
             println(permissionList)
+            println(rolePermissions)
+            println(rolePermissionRules)
+
+
 
         } catch (ex: SQLException) {
             // handle any errors
@@ -217,5 +221,41 @@ object MySQLDatabaseExampleKotlin {
         permission.creatorId = 1
         permission.modifierId = 1
         return permission
+    }
+
+    fun getRolePermissions(roleList: List<Role>, permissionList: List<Permission>):List<RolePermission> {
+        val rolePermissionList = mutableListOf<RolePermission>()
+
+        roleList.map { role ->
+            permissionList.map { permission ->
+                val rolePermission = RolePermission()
+                rolePermission.version = 0
+                rolePermission.creatorId = 1
+                rolePermission.modifierId = 1
+                rolePermission.roleId = role.id
+                rolePermission.permissionId = permission.id
+
+                rolePermissionList.add(rolePermission)
+            }
+        }
+
+        rolePermissionList.map {
+            it.id = (it.roleId.toString() + it.permissionId.toString()).toLong()
+        }
+        return rolePermissionList
+    }
+
+    fun getRolePermissionRule(rolePermissionList: List<RolePermission>, ruleList: List<Rule>):List<RolePermissionRule> {
+        val rolePermissionRuleList = mutableListOf<RolePermissionRule>()
+        rolePermissionList.map { rolePermission ->
+            ruleList.map { rule ->
+                val rolePermissionRule = RolePermissionRule()
+                rolePermissionRule.rolePermissionId = rolePermission.id
+                rolePermissionRule.ruleId = rule.id
+                rolePermissionRuleList.add(rolePermissionRule)
+            }
+        }
+
+        return rolePermissionRuleList
     }
 }

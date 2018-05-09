@@ -2,17 +2,17 @@ package JDBC.bean
 
 data class RolePermission(
 
-        val id: Long? = null,
+        var id: Long? = null,
 
-        val version: Long? = null,
+        var version: Long? = null,
 
         var creatorId: Long? = null,
 
-        val modifierId: Long? = null,
+        var modifierId: Long? = null,
 
-        val permissionId: Long? = null,
+        var permissionId: Long? = null,
 
-        val roleId: Long? = null
+        var roleId: Long? = null
 
 
 
