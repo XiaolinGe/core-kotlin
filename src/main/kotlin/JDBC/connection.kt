@@ -1,6 +1,11 @@
 package JDBC
 
 import JDBC.bean.*
+import com.google.common.base.CaseFormat
+import jdk.nashorn.internal.codegen.types.Type.isAssignableFrom
+import java.lang.UnsupportedOperationException
+import java.lang.reflect.Field
+import java.lang.reflect.Method
 import java.sql.*
 import java.util.Properties
 import java.sql.ResultSet
@@ -11,16 +16,18 @@ import java.sql.ResultSet
  */
 object MySQLDatabaseExampleKotlin {
 
-     var conn: Connection? = null
-     var username = "root" // provide the username
-     var password = "root" // provide the corresponding password
+    var conn: Connection? = null
+    var username = "root" // provide the username
+    var password = "root" // provide the corresponding password
 
-    @JvmStatic fun main(args: Array<String>) {
+    @JvmStatic
+    fun main(args: Array<String>) {
         // make a connection to MySQL Server
         getConnection()
         // execute the query via connection object
         executeMySQLQuery()
     }
+
     fun executeMySQLQuery() {
         var stmt: Statement? = null
         var resultset: ResultSet? = null
@@ -31,9 +38,9 @@ object MySQLDatabaseExampleKotlin {
             val permissionList = getPermissions("address")
             val rolePermissionList = getRolePermissions(roleList, permissionList)
             val rolePermissionRuleList = getRolePermissionRule(rolePermissionList, ruleList)
-            val permissionSqlList= getPermissionSql(permissionList)
-            val rolePermissionSqlList= getRolePermissionSql(rolePermissionList)
-            val rolePermissionRuleSqlList= getRolePermissionRuleSql(rolePermissionRuleList)
+            val permissionSqlList = getPermissionSql(permissionList)
+            val rolePermissionSqlList = getRolePermissionSql(rolePermissionList)
+            val rolePermissionRuleSqlList = getRolePermissionRuleSql(rolePermissionRuleList)
 
             println(roleList)
             println(ruleList)
@@ -43,7 +50,6 @@ object MySQLDatabaseExampleKotlin {
             println(permissionSqlList)
             println(rolePermissionSqlList)
             println(rolePermissionRuleSqlList)
-
 
 
         } catch (ex: SQLException) {
@@ -85,7 +91,7 @@ object MySQLDatabaseExampleKotlin {
      * In this example, MySQL Server is running in the local host (so 127.0.0.1)
      * at the standard port 3306
      */
-    fun getConnection(){
+    fun getConnection() {
         val connectionProps = Properties()
         connectionProps.put("user", username)
         connectionProps.put("password", password)
@@ -102,7 +108,7 @@ object MySQLDatabaseExampleKotlin {
         }
     }
 
-    fun getResultSet(beanName: String, statement: Statement?, resultset: ResultSet?): ResultSet{
+    fun getResultSet(beanName: String, statement: Statement?, resultset: ResultSet?): ResultSet {
         var stmt = statement
         var res = resultset
         stmt = conn!!.createStatement()
@@ -120,15 +126,34 @@ object MySQLDatabaseExampleKotlin {
         val roleList = mutableListOf<Role>()
         while (resultset.next()) {
             val role = JDBC.bean.Role()
+            val roleFields = Role::class.java.declaredFields
+
+            roleFields.forEach {
+                val name = CaseFormat.LOWER_CAMEL.converterTo(CaseFormat.LOWER_UNDERSCORE).convert(it.name)
+
+                val res = when (it.type) {
+                    java.lang.Long::class.java -> resultset.getLong(name)
+                    java.lang.String::class.java -> resultset.getString(name)
+                    else -> throw UnsupportedOperationException("${it.type}")
+                }
+
+                it.isAccessible = true
+                it.set(role, res)
+                it.isAccessible = false
+            }
+
+            /*
             role.id = resultset.getLong("id")
             role.version = resultset.getLong("version")
             role.name = resultset.getString("name")
             role.creatorId = resultset.getLong("creator_id")
             role.modifierId = resultset.getLong("modifier_id")
+            */
             roleList.add(role)
         }
         return roleList
     }
+
 
     fun getRules(resultset: ResultSet): List<Rule> {
         val ruleList = mutableListOf<Rule>()
@@ -145,7 +170,7 @@ object MySQLDatabaseExampleKotlin {
         return ruleList
     }
 
-    fun getPermissions(entityName: String):List<Permission> {
+    fun getPermissions(entityName: String): List<Permission> {
 
         val permissionList = mutableListOf<Permission>()
         val baseId = 1
@@ -156,9 +181,9 @@ object MySQLDatabaseExampleKotlin {
         permissionList.add(updatePermission(entityName))
         permissionList.add(deletePermission(entityName))
 
-       permissionList.mapIndexed { index, permission ->
-           permission.id = (baseId*100 + index.inc()).toLong()
-       }
+        permissionList.mapIndexed { index, permission ->
+            permission.id = (baseId * 100 + index.inc()).toLong()
+        }
 
         return permissionList
 
@@ -229,7 +254,7 @@ object MySQLDatabaseExampleKotlin {
         return permission
     }
 
-    fun getRolePermissions(roleList: List<Role>, permissionList: List<Permission>):List<RolePermission> {
+    fun getRolePermissions(roleList: List<Role>, permissionList: List<Permission>): List<RolePermission> {
         val rolePermissionList = mutableListOf<RolePermission>()
 
         roleList.map { role ->
@@ -251,7 +276,7 @@ object MySQLDatabaseExampleKotlin {
         return rolePermissionList
     }
 
-    fun getRolePermissionRule(rolePermissionList: List<RolePermission>, ruleList: List<Rule>):List<RolePermissionRule> {
+    fun getRolePermissionRule(rolePermissionList: List<RolePermission>, ruleList: List<Rule>): List<RolePermissionRule> {
         val rolePermissionRuleList = mutableListOf<RolePermissionRule>()
         rolePermissionList.map { rolePermission ->
             ruleList.map { rule ->
@@ -265,7 +290,7 @@ object MySQLDatabaseExampleKotlin {
         return rolePermissionRuleList
     }
 
-    fun getPermissionSql(permissionList: List<Permission>):List<String> {
+    fun getPermissionSql(permissionList: List<Permission>): List<String> {
         val sqlList = mutableListOf<String>()
         permissionList.map { permission ->
             val sql = """
@@ -277,7 +302,7 @@ object MySQLDatabaseExampleKotlin {
         return sqlList
     }
 
-    fun getRolePermissionSql(rolePermissionList: List<RolePermission>):List<String> {
+    fun getRolePermissionSql(rolePermissionList: List<RolePermission>): List<String> {
         val sqlList = mutableListOf<String>()
         rolePermissionList.map { rolePermission ->
             val sql = """
@@ -289,9 +314,9 @@ object MySQLDatabaseExampleKotlin {
         return sqlList
     }
 
-    fun getRolePermissionRuleSql(rolePermissionRuleList: List<RolePermissionRule>):List<String> {
+    fun getRolePermissionRuleSql(rolePermissionRuleList: List<RolePermissionRule>): List<String> {
         val sqlList = mutableListOf<String>()
-        rolePermissionRuleList.map { rolePermissionRule->
+        rolePermissionRuleList.map { rolePermissionRule ->
             val sql = """
                 INSERT INTO role_permission_rule (role_permission_id, rule_id) VALUES (${rolePermissionRule.rolePermissionId}, ${rolePermissionRule.ruleId});
                 """.trimIndent()

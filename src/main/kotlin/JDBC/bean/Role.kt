@@ -1,15 +1,14 @@
 package JDBC.bean
 
-data class Role(
+class Role {
+    var id: Long? = null
 
-        var id: Long? = null,
+    var version: Long? = null
 
-        var version: Long? = null,
+    var name: String? = null
 
-        var name: String? = null,
+    var creatorId: Long? = null
 
-        var creatorId: Long? = null,
+    var modifierId: Long? = null
 
-        var modifierId: Long? = null
-
-)
+}
