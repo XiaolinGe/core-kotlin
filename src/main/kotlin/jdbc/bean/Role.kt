@@ -1,4 +1,4 @@
-package JDBC.bean
+package jdbc.bean
 
 class Role {
     var id: Long? = null

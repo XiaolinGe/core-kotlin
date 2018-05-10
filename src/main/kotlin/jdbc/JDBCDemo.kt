@@ -1,7 +1,5 @@
-package JDBC
+package jdbc
 
-import com.sun.xml.internal.ws.streaming.XMLStreamReaderUtil.close
-import java.sql.ResultSet
 import java.sql.DriverManager
 import java.sql.SQLException
 

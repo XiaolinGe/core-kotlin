@@ -1,11 +1,9 @@
-package JDBC
+package jdbc
 
-import JDBC.bean.*
+import jdbc.bean.*
 import com.google.common.base.CaseFormat
-import jdk.nashorn.internal.codegen.types.Type.isAssignableFrom
 import java.lang.UnsupportedOperationException
-import java.lang.reflect.Field
-import java.lang.reflect.Method
+
 import java.sql.*
 import java.util.Properties
 import java.sql.ResultSet
@@ -125,7 +123,7 @@ object MySQLDatabaseExampleKotlin {
     fun getRoles(resultset: ResultSet): List<Role> {
         val roleList = mutableListOf<Role>()
         while (resultset.next()) {
-            val role = JDBC.bean.Role()
+            val role = jdbc.bean.Role()
             val roleFields = Role::class.java.declaredFields
             roleFields.forEach {
                 val name = CaseFormat.LOWER_CAMEL.converterTo(CaseFormat.LOWER_UNDERSCORE).convert(it.name)
@@ -150,7 +148,7 @@ object MySQLDatabaseExampleKotlin {
     fun getRules(resultset: ResultSet): List<Rule> {
         val ruleList = mutableListOf<Rule>()
         while (resultset.next()) {
-            val rule = JDBC.bean.Rule()
+            val rule = jdbc.bean.Rule()
             val ruleFileds = Rule::class.java.declaredFields
             ruleFileds.forEach {
                 val name = CaseFormat.LOWER_CAMEL.converterTo(CaseFormat.LOWER_UNDERSCORE).convert(it.name)

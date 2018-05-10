@@ -1,4 +1,4 @@
-package JDBC.bean
+package jdbc.bean
 
 data class Permission(
 
