@@ -127,7 +127,6 @@ object MySQLDatabaseExampleKotlin {
         while (resultset.next()) {
             val role = JDBC.bean.Role()
             val roleFields = Role::class.java.declaredFields
-
             roleFields.forEach {
                 val name = CaseFormat.LOWER_CAMEL.converterTo(CaseFormat.LOWER_UNDERSCORE).convert(it.name)
 
@@ -141,30 +140,31 @@ object MySQLDatabaseExampleKotlin {
                 it.set(role, res)
                 it.isAccessible = false
             }
-
-            /*
-            role.id = resultset.getLong("id")
-            role.version = resultset.getLong("version")
-            role.name = resultset.getString("name")
-            role.creatorId = resultset.getLong("creator_id")
-            role.modifierId = resultset.getLong("modifier_id")
-            */
             roleList.add(role)
         }
         return roleList
     }
 
 
+
     fun getRules(resultset: ResultSet): List<Rule> {
         val ruleList = mutableListOf<Rule>()
         while (resultset.next()) {
             val rule = JDBC.bean.Rule()
-            rule.id = resultset.getLong("id")
-            rule.version = resultset.getLong("version")
-            rule.name = resultset.getString("name")
-            rule.params = resultset.getString("params")
-            rule.type = resultset.getString("type")
-            rule.enable = resultset.getString("enable")
+            val ruleFileds = Rule::class.java.declaredFields
+            ruleFileds.forEach {
+                val name = CaseFormat.LOWER_CAMEL.converterTo(CaseFormat.LOWER_UNDERSCORE).convert(it.name)
+
+                val res = when(it.type) {
+                    java.lang.Long::class.java -> resultset.getLong(name)
+                    java.lang.String::class.java -> resultset.getString(name)
+                    else -> throw UnsupportedOperationException("${it.type}")
+                }
+
+                it.isAccessible = true
+                it.set(rule, res)
+                it.isAccessible = false
+            }
             ruleList.add(rule)
         }
         return ruleList
