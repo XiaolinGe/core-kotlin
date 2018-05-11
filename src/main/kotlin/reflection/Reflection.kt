@@ -63,6 +63,8 @@ fun doTestMethod () {
     val con = classType.getConstructor(String::class.java)
     val role = con.newInstance("roleConstructName")
 
+    println("role type : ${role::class.java}")
+
     val method = classType.getMethod("test", String::class.java)
     val test = method.invoke(role, "invoke")
     println("invoke :  $test")
