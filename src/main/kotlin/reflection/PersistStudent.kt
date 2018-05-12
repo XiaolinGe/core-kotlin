@@ -7,7 +7,7 @@ object PersistStudent {
     @JvmStatic
     fun main(args: Array<String>) {
 
-        val c = Class.forName("reflection.bean.Student").newInstance()
+        val c = Class.forName("reflection.bean.Person").newInstance()
 
 
         val methodArray = c.javaClass.declaredMethods

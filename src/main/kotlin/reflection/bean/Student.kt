@@ -4,7 +4,7 @@ import reflection.ValueBind
 import reflection.fieldType
 
 
-public class Student {
+ class Student {
     private var name: String? = null
     private var age = 0
     private var studentId = 1
