@@ -31,6 +31,13 @@ open class BaseDao<T> {
         return findAllSql(sql, this.clazz!!, FindAllMapper) as List<T>
     }
 
+    fun deleteOne(id: Int):  Any? {
+        baseDaoInfo()
+        val sql = "delete from aci_$tableName where id = $id;"
+        return deleteOneSql(sql, this.clazz!!, DeleteOneMapper)
+    }
+
+
 }
 
 
