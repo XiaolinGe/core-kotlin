@@ -27,7 +27,7 @@ fun getConnection() {
     val rootPath = Thread.currentThread().contextClassLoader.getResource("")!!.path
     val connectionConfigPath = "${File(rootPath).parent}/resources/generator/local.properties"
     val connectionProps = Properties()
-    connectionProps.load(FileInputStream(connectionConfigPath))
+   // connectionProps.load(FileInputStream(connectionConfigPath))
 
     /*
     val jdbcUser = connectionProps.getProperty("jdbcUser")
@@ -40,7 +40,7 @@ fun getConnection() {
     val jdbcDriver = "com.mysql.jdbc.Driver"
     val jdbcUser = "root"
     val jdbcPassword = "root"
-    val jdbcUrl = "jdbc:mysql://127.0.0.1:3306/database"
+    val jdbcUrl = "jdbc:mysql://127.0.0.1:3306/collinson"
 
 
     connectionProps["user"] = jdbcUser
@@ -79,7 +79,7 @@ val clazzMapper: (resultSet: ResultSet, clazz: Class<*>) -> List<Any> = { result
     beanList
 }
 
-fun <T> executeSql(sql: String, clazz: Class<*>, mapper: (resultSet: ResultSet, clazz: Class<*>) -> List<T>): List<T> {
+public fun <T> executeSql(sql: String, clazz: Class<*>, mapper: (resultSet: ResultSet, clazz: Class<*>) -> List<T>): List<T> {
     getConnection()
     val stmt: Statement? = conn!!.createStatement()
     var resultSet = stmt!!.executeQuery(sql)
