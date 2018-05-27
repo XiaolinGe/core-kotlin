@@ -11,9 +11,9 @@ object JDBCDemo {
         Class.forName("com.mysql.jdbc.Driver")
         val connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/collinson", "root", "root")
         val stmt = connection.createStatement()
-        val rs = stmt.executeQuery("SELECT *  FROM role")
+        val rs = stmt.executeQuery("SELECT *  FROM aci_role")
         while (rs.next()) {
-            val name = rs.getString("A_NAME")
+            val name = rs.getString("NAME")
             println("name is:" + name)
         }
         rs.close()
