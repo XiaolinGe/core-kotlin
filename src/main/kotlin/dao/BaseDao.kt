@@ -25,6 +25,12 @@ open class BaseDao<T> {
         return findOneSql(sql, this.clazz!!, FindOneMapper) as T
     }
 
+    fun findAll(): List<T>? {
+        baseDaoInfo()
+        val sql = "select * from aci_$tableName;"
+        return findAllSql(sql, this.clazz!!, FindAllMapper) as List<T>
+    }
+
 }
 
 
