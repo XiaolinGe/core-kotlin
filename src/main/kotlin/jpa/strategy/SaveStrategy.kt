@@ -5,6 +5,7 @@ import com.google.common.base.CaseFormat
 import jdbc.conn
 import jdbc.getConnection
 import java.sql.ResultSet
+import java.sql.SQLException
 import java.sql.Statement
 
 
@@ -13,7 +14,7 @@ val SaveOneMapper: (resultSet: ResultSet, clazz: Class<*>) -> Any = { resultSet,
     while (resultSet.next()) {
         clazz.declaredFields.forEach {
             val name = CaseFormat.LOWER_CAMEL.converterTo(CaseFormat.LOWER_UNDERSCORE).convert(it.name)
-            val obj = when(it.type){
+            val obj = when (it.type) {
                 java.lang.Long::class.java -> resultSet.getLong(name)
                 java.lang.String::class.java -> resultSet.getString(name)
                 else -> throw UnsupportedOperationException("${it.type}")
@@ -24,20 +25,29 @@ val SaveOneMapper: (resultSet: ResultSet, clazz: Class<*>) -> Any = { resultSet,
         }
     }
 
-   bean
+    bean
 }
 
 
 fun <T> saveOneSql(sql: String, clazz: Class<*>, mapper: (resultSet: ResultSet, clazz: Class<*>) -> T?): T? {
     getConnection()
-    val stmt: Statement? = conn!!.createStatement()
-    var resultSet = stmt!!.executeUpdate(sql)
-/*
-    if (stmt.execute(sql)) {
-        resultSet = stmt.resultSet
+
+    try {
+        conn!!.autoCommit = false
+        val stmt: Statement? = conn!!.createStatement()
+        stmt!!.executeUpdate(sql)
+        conn!!.commit()
+        conn!!.autoCommit = true
+    } catch (e: SQLException) {
+        try {
+            conn!!.rollback()
+            conn!!.close()
+        } catch (e1: SQLException) {
+            e1.printStackTrace()
+        }
     }
-
-    return mapper(resultSet, clazz)*/
-
     return null
+
 }
+
+

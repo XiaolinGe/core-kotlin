@@ -48,10 +48,9 @@ open class BaseDao<T> {
         //val idField = getId(clazz)
         sql = when(id) {
             null -> "INSERT INTO aci_role ( version, name, creator_id, modifier_id) VALUES (0, 'tester', 1, 1);"
-            else -> "UPDATE aci_role SET name='tester2' where id = $id;"
+            else -> "UPDATE aci_role SET name='111' where name='tester';"
         }
         return saveOneSql(sql, this.clazz!!, SaveOneMapper) as T
-
     }
 
 }

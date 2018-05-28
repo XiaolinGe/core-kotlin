@@ -21,7 +21,6 @@ class DoTest {
         println(deletedRole)
         println(insertRole)
         println(updatedRole)
-       // System.out.println("id+title:" + type.getId() + ":" + type.getTitle())
         println("==============================================")
 
     }
