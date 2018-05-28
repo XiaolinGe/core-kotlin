@@ -1,6 +1,7 @@
 package jpa.dao
 
-import jpa.annotation.id.getPrimaryKey
+import jpa.annotation.id.getId
+import jpa.annotation.primaryKey.getPrimaryKey
 import jpa.bean.Role
 import jpa.strategy.*
 import java.lang.reflect.ParameterizedType
@@ -54,6 +55,9 @@ open class BaseDao<T> {
 
 fun main(args: Array<String>) {
     val role = Role::class.java
-    val s = getPrimaryKey(role)
-    println(s)
+    val id = getId(role)
+    val pk = getPrimaryKey(role)
+
+    println(id)
+    println(pk)
 }
