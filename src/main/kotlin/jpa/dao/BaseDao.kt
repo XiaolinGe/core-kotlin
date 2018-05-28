@@ -1,5 +1,8 @@
-package dao
+package jpa.dao
 
+import jpa.annotation.id.getPrimaryKey
+import jpa.bean.Role
+import jpa.strategy.*
 import java.lang.reflect.ParameterizedType
 
 open class BaseDao<T> {
@@ -37,9 +40,20 @@ open class BaseDao<T> {
         return deleteOneSql(sql, this.clazz!!, DeleteOneMapper)
     }
 
-
 }
 
 
+/**
+ * JDBC: java database connectivity, Java数据库连接
+ * annotation: Id, PrimaryKey,
+ * strategy: save (insert, update)
+ * jdbc 事务
+ * annotation: Table, Column, other
+ *
+ * */
 
-
+fun main(args: Array<String>) {
+    val role = Role::class.java
+    val s = getPrimaryKey(role)
+    println(s)
+}

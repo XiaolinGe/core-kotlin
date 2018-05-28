@@ -7,8 +7,8 @@ import java.lang.reflect.Method
 
 
 fun main(args: Array<String>) {
-    val permissionClass = Class.forName("reflection.bean.Permission")
-    val roleClass = Class.forName("reflection.bean.Role")
+    val permissionClass = Class.forName("reflection.jpa.bean.Permission")
+    val roleClass = Class.forName("reflection.jpa.bean.Role")
     getModifiers(permissionClass)
     getSuperClassName(permissionClass)
     createPermissionObj(permissionClass)

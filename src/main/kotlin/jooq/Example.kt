@@ -23,7 +23,7 @@ fun createEmployeeObj():Employee {
     val obj = Employee()
     Reflect.on(obj)
     Reflect.on(Employee::class.java)
-    val e:Employee = on("jooq.bean.Employee")
+    val e:Employee = on("jooq.jpa.bean.Employee")
             .create()
             .get()
 
@@ -32,7 +32,7 @@ fun createEmployeeObj():Employee {
 }
 
 fun doMethod() {
-    val res = on("jooq.bean.Employee")
+    val res = on("jooq.jpa.bean.Employee")
             .create()
             .call("setTheName",  "new")
             .get<Employee>()

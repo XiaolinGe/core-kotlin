@@ -1,4 +1,4 @@
-package dao
+package jpa.strategy
 
 import com.google.common.base.CaseFormat
 import jdbc.conn

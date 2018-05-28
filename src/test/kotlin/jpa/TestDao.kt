@@ -1,5 +1,6 @@
-package dao
+package jpa
 
+import jpa.dao.RoleDao
 import org.junit.Test
 import java.sql.SQLException
 
