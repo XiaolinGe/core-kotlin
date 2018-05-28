@@ -41,6 +41,19 @@ open class BaseDao<T> {
         return deleteOneSql(sql, this.clazz!!, DeleteOneMapper)
     }
 
+    fun saveOne(id: Int?): T? {
+        baseDaoInfo()
+        var sql = ""
+        val clazz: Class<*>? = null
+        //val idField = getId(clazz)
+        sql = when(id) {
+            null -> "INSERT INTO aci_role ( version, name, creator_id, modifier_id) VALUES (0, 'tester', 1, 1);"
+            else -> "UPDATE aci_role SET name='tester2' where id = $id;"
+        }
+        return saveOneSql(sql, this.clazz!!, SaveOneMapper) as T
+
+    }
+
 }
 
 

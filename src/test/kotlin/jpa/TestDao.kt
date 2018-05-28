@@ -13,9 +13,14 @@ class DoTest {
         val role = roleDao.findOne(1)
         val roleList = roleDao.findAll()
         val deletedRole = roleDao.deleteOne(106)
+        val insertRole = roleDao.saveOne(null)
+        val updatedRole = roleDao.saveOne(107)
+
         println(role)
         println(roleList)
         println(deletedRole)
+        println(insertRole)
+        println(updatedRole)
        // System.out.println("id+title:" + type.getId() + ":" + type.getTitle())
         println("==============================================")
 
