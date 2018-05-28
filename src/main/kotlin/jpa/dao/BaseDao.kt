@@ -2,6 +2,7 @@ package jpa.dao
 
 import jpa.annotation.id.getId
 import jpa.annotation.primaryKey.getPrimaryKey
+import jpa.annotation.table.getTableName
 import jpa.bean.Role
 import jpa.strategy.*
 import java.lang.reflect.ParameterizedType
@@ -43,6 +44,8 @@ open class BaseDao<T> {
 
     fun saveOne(id: Int?): T? {
         baseDaoInfo()
+        val tableName = getTableName(this.clazz!!)
+        println("table name: $tableName")
         var sql = ""
         val clazz: Class<*>? = null
         //val idField = getId(clazz)

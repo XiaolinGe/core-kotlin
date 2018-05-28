@@ -2,8 +2,9 @@ package jpa.bean
 
 import jpa.annotation.id.Id
 import jpa.annotation.primaryKey.PrimaryKey
+import jpa.annotation.table.Table
 
-
+@Table(name = "aci_role")
 class Role {
 
     @Id
