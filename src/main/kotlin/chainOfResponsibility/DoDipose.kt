@@ -1,4 +1,4 @@
-package chainOfRespinsibility
+package chainOfResponsibility
 
 object Main {
     @JvmStatic

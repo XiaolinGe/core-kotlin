@@ -1,4 +1,4 @@
-package chainOfRespinsibility
+package chainOfResponsibility
 
 class Staff: Handler() {
     override fun dispose(user: String, fee: Double): String? {

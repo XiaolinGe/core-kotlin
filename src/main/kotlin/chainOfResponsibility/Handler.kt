@@ -1,4 +1,4 @@
-package chainOfRespinsibility
+package chainOfResponsibility
 
 abstract class Handler {
     var nextHandler: Handler? = null
