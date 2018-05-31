@@ -73,5 +73,18 @@ fun main(args: Array<String>) {
     println(proxy3.size)
 */
 
+    println("------------------- 编写可生成代理和插入通告的通用方法 ------------------- ")
+
+    println("------------------- 实现类似 Spring 的可配置的 AOP 框架 ------------------- ")
+    /**
+     * BeanFactory
+     * val obj: Object = BeanFactory.getBean("XXX")
+     *
+     *
+     * */
+
+
+
+
 }
 
